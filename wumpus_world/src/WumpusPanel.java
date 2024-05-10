@@ -1,6 +1,9 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+
+import javax.imageio.ImageIO;
 
 import javax.swing.*;
 
@@ -40,6 +43,15 @@ public class WumpusPanel extends JPanel implements KeyListener {
     }
 
     public void paint (Graphics g) {
+
+        try {
+            floor = ImageIO.read(new File("Floor.gif"));
+            System.out.println("Images loaded successfully");
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+
         //Paints the game world to the screen, with the appropriate messages.
 
         
