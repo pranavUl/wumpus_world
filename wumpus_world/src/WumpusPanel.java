@@ -39,6 +39,28 @@ public class WumpusPanel extends JPanel implements KeyListener {
 
         setSize(panelWidth, panelHeight);
 
+        System.out.println("Current directory: " + new File(".").getAbsolutePath()); 
+
+        try {
+
+            File imgFile = new File("images\\Floor.gif");
+            if (!imgFile.exists()) {
+                System.out.println("Image file NOT FOUND at: " + imgFile.getAbsolutePath());
+            }
+            else if (!imgFile.canRead()) {
+                System.out.println("No READ perms for file at: " + imgFile.getAbsolutePath());
+            } else {
+                System.out.println("Loading valid image file from: " + imgFile.getAbsolutePath());
+            }
+
+            floor = ImageIO.read((new File("images\\Floor.gif")));
+            ladder = ImageIO.read((new File("images\\ladder.gif")));
+            System.out.println("Images loaded successfully");
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+
         addKeyListener(this);
     }
 
@@ -46,14 +68,11 @@ public class WumpusPanel extends JPanel implements KeyListener {
 
         //Paints the game world to the screen, with the appropriate messages.
 
-        try {
-            floor = ImageIO.read(new File("Floor.gif"));
-            System.out.println("Images loaded successfully");
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, getWidth(), getHeight());
 
+        g.drawImage(floor, 50, 50, null);
+        g.drawImage(ladder, 50, 50, null);
         
     }
 
