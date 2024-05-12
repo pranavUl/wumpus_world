@@ -37,13 +37,19 @@ public class WumpusPanel extends JPanel implements KeyListener {
     public WumpusPanel(int panelWidth, int panelHeight) {
         super();
 
+        this.status = 0;
+        this.player = new WumpusPlayer();
+        this.map = new WumpusMap();
+        this.player.setRowPosition(map.getLadderR());
+        this.player.setColPosition(map.getLadderC());
+
         setSize(panelWidth, panelHeight);
 
-        System.out.println("Current directory: " + new File(".").getAbsolutePath()); 
+        //System.out.println("Current directory: " + new File(".").getAbsolutePath()); 
 
         try {
 
-            File imgFile = new File("images\\Floor.gif");
+            File imgFile = new File("wumpus_world\\src\\images\\Floor.gif");
             if (!imgFile.exists()) {
                 System.out.println("Image file NOT FOUND at: " + imgFile.getAbsolutePath());
             }
@@ -53,8 +59,20 @@ public class WumpusPanel extends JPanel implements KeyListener {
                 System.out.println("Loading valid image file from: " + imgFile.getAbsolutePath());
             }
 
-            floor = ImageIO.read((new File("images\\Floor.gif")));
-            ladder = ImageIO.read((new File("images\\ladder.gif")));
+            floor = ImageIO.read((new File("wumpus_world\\src\\images\\Floor.gif")));
+            arrow = ImageIO.read((new File("wumpus_world\\src\\images\\arrow.gif")));
+            fog = ImageIO.read((new File("wumpus_world\\src\\images\\black.GIF")));
+            gold = ImageIO.read((new File("wumpus_world\\src\\images\\gold.gif")));
+            ladder = ImageIO.read((new File("wumpus_world\\src\\images\\ladder.gif")));
+            pit = ImageIO.read((new File("wumpus_world\\src\\images\\pit.gif")));
+            breeze = ImageIO.read((new File("wumpus_world\\src\\images\\breeze.gif")));
+            wumpus = ImageIO.read((new File("wumpus_world\\src\\images\\wumpus.gif")));
+            deadWumpus = ImageIO.read((new File("wumpus_world\\src\\images\\deadWumpus.GIF")));
+            stench = ImageIO.read((new File("wumpus_world\\src\\images\\stench.gif")));
+            playerUp = ImageIO.read((new File("wumpus_world\\src\\images\\playerUp.png")));
+            playerDown = ImageIO.read((new File("wumpus_world\\src\\images\\playerDown.png")));
+            playerLeft = ImageIO.read((new File("wumpus_world\\src\\images\\playerLeft.png")));
+            playerRight = ImageIO.read((new File("wumpus_world\\src\\images\\playerRight.png")));
             System.out.println("Images loaded successfully");
         }
         catch(Exception e) {
@@ -71,8 +89,55 @@ public class WumpusPanel extends JPanel implements KeyListener {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, getWidth(), getHeight());
 
-        g.drawImage(floor, 50, 50, null);
-        g.drawImage(ladder, 50, 50, null);
+        for (int i = 0; i < WumpusMap.NUM_ROWS; i++) {
+            for (int k = 0; k < WumpusMap.NUM_COLUMNS; k++) {
+                g.drawImage(floor, 50 + i*50, 50 + k*50, null);
+                /*if (!map.getSquare(i, k).isVisited()) {
+                    g.drawImage(floor, 50 + i*50, 50 + k*50, null);
+                    continue;
+                }
+                else if (map.getSquare(i, k).isVisited()) {
+                    g.drawImage(fog, 50 + i*50, 50 + k*50, null);
+                }*/
+                if (map.getSquare(i, k).isGold()) {
+                    g.drawImage(gold, 50 + i*50, 50 + k*50, null);
+                }
+                if (map.getSquare(i, k).isWumpus()) {
+                    g.drawImage(wumpus, 50 + i*50, 50 + k*50, null);
+                }
+                if (map.getSquare(i, k).isLadder()) {
+                    g.drawImage(ladder, 50 + i*50, 50 + k*50, null);
+                }
+                if (map.getSquare(i, k).isPit()) {
+                    g.drawImage(pit, 50 + i*50, 50 + k*50, null);
+                }
+                if (map.getSquare(i, k).isDeadWumpus()) {
+                    g.drawImage(deadWumpus, 50 + i*50, 50 + k*50, null);
+                }
+                if (map.getSquare(i, k).isBreeze()) {
+                    g.drawImage(breeze, 50 + i*50, 50 + k*50, null);
+                }
+                if (map.getSquare(i, k).isStench()) {
+                    g.drawImage(stench, 50 + i*50, 50 + k*50, null);
+                }
+                
+            }
+        }
+
+        if (player.getDirection() == 0) {
+            g.drawImage(playerUp, 50 + player.getRowPosition()*50, 50 + player.getColPosition()*50, null);
+        }
+        else if (player.getDirection() == 1) {
+            g.drawImage(playerRight, 50 + player.getRowPosition()*50, 50 + player.getColPosition()*50, null);
+        }
+        else if (player.getDirection() == 2) {
+            g.drawImage(playerDown, 50 + player.getRowPosition()*50, 50 + player.getColPosition()*50, null);
+        }
+        else if (player.getDirection() == 3) {
+            g.drawImage(playerLeft, 50 + player.getRowPosition()*50, 50 + player.getColPosition()*50, null);
+        }
+
+        //g.drawImage(ladder, 50, 50, null);
         
     }
 
@@ -107,10 +172,12 @@ public class WumpusPanel extends JPanel implements KeyListener {
     }
 
     public void reset() {
+
         this.status = 0;
-        map = new WumpusMap();
+        this.map.createMap();
         this.player.setRowPosition(map.getLadderR());
         this.player.setColPosition(map.getLadderC());
+
     }
 
 

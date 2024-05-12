@@ -2,8 +2,8 @@ import java.util.Random;
 
 public class WumpusMap {
 
-    public static final int NUM_ROWS = 10;
-    public static final int NUM_COLUMNS = 10;
+    public static final int NUM_ROWS = 4;
+    public static final int NUM_COLUMNS = 4;
     public static final int NUM_PITS = 10;
 
     private WumpusSquare[][] grid;
@@ -21,7 +21,7 @@ public class WumpusMap {
         }
 
         while (!isSolvable(this.grid, beenThereFill, this.ladderC, this.ladderR)) {
-            System.out.println("\n\n" + this.toString());
+            //System.out.println("\n\n" + this.toString());
             this.createMap();
             for (int i = 0; i < NUM_ROWS; i++) {
                 for (int j = 0; j < NUM_COLUMNS; j++) {
@@ -29,6 +29,7 @@ public class WumpusMap {
                 }
             }
         }
+        System.out.println("\n\n" + this.toString());
         //if (!isSolvable(this.grid, beenThereFill, this.ladderC, this.ladderR)) {
         //    System.out.println("\n\nnot solvable - " + this.ladderC + " " + this.ladderR);
         //}
@@ -86,6 +87,7 @@ public class WumpusMap {
             randCol = rand.nextInt(NUM_COLUMNS);
         }
         grid[randRow][randCol].setWumpus(true);
+        grid[randRow][randCol].setStench(true);
         if (randRow != NUM_ROWS-1) {
             grid[randRow+1][randCol].setStench(true);
         }
@@ -127,8 +129,8 @@ public class WumpusMap {
         this.ladderR = ladderR;
     }
 
-    public WumpusSquare getSquare(int c, int r) {
-        if (c >= 0 && c < NUM_ROWS && r >= 0 && c < NUM_COLUMNS) {
+    public WumpusSquare getSquare(int r, int c) {
+        if (c >= 0 && c < NUM_COLUMNS && r >= 0 && c < NUM_ROWS) {
             return grid[r][c];
         }
         else {
