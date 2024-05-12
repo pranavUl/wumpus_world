@@ -6,8 +6,8 @@ public class Main {
         
         System.out.println(map);
 
-        JFrame WumpusFrame = new WumpusFrame();
-        WumpusFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        WumpusFrame.setVisible(true);
+        //JFrame WumpusFrame = new WumpusFrame();
+        //WumpusFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //WumpusFrame.setVisible(true);
     }
 }

@@ -20,9 +20,19 @@ public class WumpusMap {
             }
         }
 
-        while (isSolvable(this.grid, beenThereFill, this.ladderR, this.ladderC) == false) {
+        while (!isSolvable(this.grid, beenThereFill, this.ladderC, this.ladderR)) {
+            System.out.println("\n\n" + this.toString());
             this.createMap();
+            for (int i = 0; i < NUM_ROWS; i++) {
+                for (int j = 0; j < NUM_COLUMNS; j++) {
+                    beenThereFill[i][j] = false;
+                }
+            }
         }
+        //if (!isSolvable(this.grid, beenThereFill, this.ladderC, this.ladderR)) {
+        //    System.out.println("\n\nnot solvable - " + this.ladderC + " " + this.ladderR);
+        //}
+        //System.out.println("\n\n" + this.toString());
 
     }
 
@@ -139,12 +149,12 @@ public class WumpusMap {
         return map;
     }
 
-    public static boolean isSolvable(char[][] maze, boolean[][] beenThere, int col, int row) { //copied DS0 - Ch13
+    public static boolean isSolvable(WumpusSquare[][] grid, boolean[][] beenThere, int col, int row) { //copied DS0 - Ch13
     
-            if (col > maze[0].length-1) {
+            if (col > grid[0].length-1) {
                 return false;
             }
-            else if (row > maze.length-1) {
+            else if (row > grid.length-1) {
                 return false;
             }
             else if (col < 0) {
@@ -157,16 +167,16 @@ public class WumpusMap {
                 return false;
             }
     
-            if (maze[row][col] == 'W') {
+            if (grid[row][col].toString().equals("P")) {
                 return false;
             }
-            if (maze[row][col] == 'E') {
+            if (grid[row][col].toString().equals("G") || grid[row][col].toString().equals("@")) {
                 return true;
             }
             
             beenThere[row][col] = true;
             
-            if (isSolvable(maze, beenThere, col+1, row) || isSolvable(maze, beenThere, col-1, row) || isSolvable(maze, beenThere, col, row+1) || isSolvable(maze, beenThere, col, row-1)) {
+            if (isSolvable(grid, beenThere, col+1, row) || isSolvable(grid, beenThere, col-1, row) || isSolvable(grid, beenThere, col, row+1) || isSolvable(grid, beenThere, col, row-1)) {
                 return true;
             }
             return false;
