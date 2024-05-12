@@ -44,6 +44,8 @@ public class WumpusPanel extends JPanel implements KeyListener {
 
     public void paint (Graphics g) {
 
+        //Paints the game world to the screen, with the appropriate messages.
+
         try {
             floor = ImageIO.read(new File("Floor.gif"));
             System.out.println("Images loaded successfully");
@@ -51,8 +53,6 @@ public class WumpusPanel extends JPanel implements KeyListener {
         catch(Exception e) {
             e.printStackTrace();
         }
-
-        //Paints the game world to the screen, with the appropriate messages.
 
         
     }

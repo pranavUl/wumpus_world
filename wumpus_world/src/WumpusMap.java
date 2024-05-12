@@ -13,6 +13,17 @@ public class WumpusMap {
 
     public WumpusMap() {
         this.createMap();
+        boolean[][] beenThereFill = new boolean[NUM_ROWS][NUM_COLUMNS];
+        for (int i = 0; i < NUM_ROWS; i++) {
+            for (int j = 0; j < NUM_COLUMNS; j++) {
+                beenThereFill[i][j] = false;
+            }
+        }
+
+        while (isSolvable(this.grid, beenThereFill, this.ladderR, this.ladderC) == false) {
+            this.createMap();
+        }
+
     }
 
     public void createMap() {
@@ -36,13 +47,13 @@ public class WumpusMap {
                 randCol = rand.nextInt(NUM_COLUMNS);
             }
             grid[randRow][randCol].setPit(true);
-            if (randRow != 9) {
+            if (randRow != NUM_ROWS-1) {
                 grid[randRow+1][randCol].setBreeze(true);
             }
             if (randRow != 0) {
                 grid[randRow-1][randCol].setBreeze(true);
             }
-            if (randCol != 9) {
+            if (randCol != NUM_COLUMNS-1) {
                 grid[randRow][randCol+1].setBreeze(true);
             }
             if (randCol != 0) {
@@ -65,13 +76,13 @@ public class WumpusMap {
             randCol = rand.nextInt(NUM_COLUMNS);
         }
         grid[randRow][randCol].setWumpus(true);
-        if (randRow != 9) {
+        if (randRow != NUM_ROWS-1) {
             grid[randRow+1][randCol].setStench(true);
         }
         if (randRow != 0) {
             grid[randRow-1][randCol].setStench(true);
         }
-        if (randCol != 9) {
+        if (randCol != NUM_COLUMNS-1) {
             grid[randRow][randCol+1].setStench(true);
         }
         if (randCol != 0) {
@@ -126,6 +137,40 @@ public class WumpusMap {
         }
 
         return map;
+    }
+
+    public static boolean isSolvable(char[][] maze, boolean[][] beenThere, int col, int row) { //copied DS0 - Ch13
+    
+            if (col > maze[0].length-1) {
+                return false;
+            }
+            else if (row > maze.length-1) {
+                return false;
+            }
+            else if (col < 0) {
+                return false;
+            }
+            else if (row < 0) {
+                return false;
+            }
+            else if (beenThere[row][col]) {
+                return false;
+            }
+    
+            if (maze[row][col] == 'W') {
+                return false;
+            }
+            if (maze[row][col] == 'E') {
+                return true;
+            }
+            
+            beenThere[row][col] = true;
+            
+            if (isSolvable(maze, beenThere, col+1, row) || isSolvable(maze, beenThere, col-1, row) || isSolvable(maze, beenThere, col, row+1) || isSolvable(maze, beenThere, col, row-1)) {
+                return true;
+            }
+            return false;
+    
     }
 
 }
